@@ -1,6 +1,6 @@
 import styles from '@styles/Admin.module.css';
-import AuthCheck from '@components/AuthCheck';
-import PostFeed from '@components/PostFeed';
+import AuthCheck from '@components/helpers/AuthCheck';
+import PostFeed from '@components/layout/PostFeed';
 import { UserContext } from '@lib/context';
 import { firestore, auth } from '@lib/firebase';
 import { serverTimestamp, query, collection, orderBy, getFirestore, setDoc, doc } from 'firebase/firestore';

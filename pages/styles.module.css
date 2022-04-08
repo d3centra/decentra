@@ -1,0 +1,43 @@
+.logo{
+  background-color: white;
+  height: 10vh;
+  border-radius: 50px;
+}
+
+.main{
+  overflow-y: scroll;
+  padding: 1em;
+  padding-right: 5vw;
+  padding-left: 5vw;
+}
+
+.main_grid{
+  max-height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1em;
+}
+
+.link_block{
+  height: 30vh;
+  width: 100%;
+  background-color: #272522;
+  padding: 1em;
+}
+
+.long_block{
+  height: 40vh;
+  width: 100%;
+  background-color: #272522;
+  padding: 1em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.link_block_create{
+  border: 2px solid rgba(211, 211, 211, 0.269); 
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

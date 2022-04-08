@@ -1,8 +1,8 @@
 import styles from '@styles/Admin.module.css';
-import AuthCheck from '@components/AuthCheck';
+import AuthCheck from '@components/helpers/AuthCheck';
 import { firestore, auth } from '@lib/firebase';
 import { serverTimestamp, doc, deleteDoc, updateDoc, getFirestore } from 'firebase/firestore';
-import ImageUploader from '@components/ImageUploader';
+import ImageUploader from '@components/simple/ImageUploader';
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';

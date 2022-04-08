@@ -1,8 +1,8 @@
 import { getUserWithUsername, postToJSON, firestore } from '@lib/firebase';
 import { query, collection, where, getDocs, limit, orderBy, getFirestore } from 'firebase/firestore';
-import UserProfile from '@components/UserProfile';
-import Metatags from '@components/Metatags';
-import PostFeed from '@components/PostFeed';
+import UserProfile from '@components/layout/UserProfile';
+import Metatags from '@components/helpers/MetaTags';
+import PostFeed from '@components/layout/PostFeed';
 
 
 export async function getServerSideProps({ query: urlQuery }) {

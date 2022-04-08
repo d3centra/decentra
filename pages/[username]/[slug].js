@@ -1,8 +1,8 @@
 import styles from '@styles/Post.module.css';
-import PostContent from '@components/PostContent';
-import HeartButton from '@components/HeartButton';
-import AuthCheck from '@components/AuthCheck';
-import Metatags from '@components/Metatags';
+import PostContent from '@components/layout/PostContent';
+import HeartButton from '@components/simple/HeartButton';
+import AuthCheck from '@components/helpers/AuthCheck';
+import Metatags from '@components/helpers/MetaTags';
 import { UserContext } from '@lib/context';
 import { firestore, getUserWithUsername, postToJSON } from '@lib/firebase';
 import { doc, getDocs, getDoc, collectionGroup, query, limit, getFirestore } from 'firebase/firestore';

@@ -1,12 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
-  --color-bg: #eef0f1;
-  --color-text: #08090a;
+  --color-bg: #3D3B39;
+  --color-text: white;
   --color-blue: #3b49df;
   --color-red: #df3b3b;
-  --color-green: #3bdf72;
-  --color-gray: #b5bdc4;
+  --color-green: #14D010;
+  --color-gray: #272522;
 }
 html,
 body {
@@ -18,10 +24,18 @@ body {
   margin-top: 50px;
 }
 
-
-
+@media screen and (min-width: 786px) {
+  
 main {
-  padding: 1rem 10vw;
+  position: fixed;
+  top: 0;
+  left: 7vw;
+  height: 100vh;
+  padding: 2em;
+  padding-top: 0;
+  padding-top: 5em;
+  padding-bottom: 0;
+  width: 70%;
 }
 
 h1 { font-size: 2rem; }
@@ -62,13 +76,13 @@ code {
 /* Navbar */
 
 .navbar {
-  height: 70px;
-  width: 100%;
-  background: white;
+  height: 100vh;
+  width: 8vw;
+  min-width: 80px;
+  background: #272522;
   color: var(--colors-text);
   position: fixed;
   top: 0;
-  padding: 0 10vw;
   font-weight: bold;
   border-bottom: 1px solid var(--color-gray);
   z-index: 99;
@@ -80,8 +94,9 @@ code {
   padding: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #272522;
 }
 
 .navbar img {
@@ -99,7 +114,7 @@ code {
 /* Buttons */
 
 .btn, button {
-  background-color: var(--color-gray);
+  background-color: var(--color-green);
   border: none;
   color: var(--color-text);
   padding: 1rem 2rem;
@@ -171,7 +186,7 @@ button.btn-logo {
 .card {
   padding: 2rem;
   margin: 1rem 0;
-  background-color: white;
+  background-color: #272522;
   border: 1px solid var(--color-gray);
   border-radius: 8px;
 }
@@ -260,3 +275,4 @@ input[type="file"] {
 }
 
 .hidden { display:  none; }
+}
