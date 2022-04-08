@@ -6,6 +6,7 @@ import Metatags from '@components/helpers/MetaTags';
 
 import { useEffect, useState, useCallback, useContext } from 'react';
 import debounce from 'lodash.debounce';
+import router, { useRouter } from 'next/router';
 
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
@@ -52,6 +53,8 @@ function UsernameForm() {
 
   const { user, username } = useContext(UserContext);
 
+  router = useRouter();
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -65,6 +68,7 @@ function UsernameForm() {
     batch.set(usernameDoc, { uid: user.uid });
 
     await batch.commit();
+    router.push('/main')
   };
 
   const onChange = (e) => {
