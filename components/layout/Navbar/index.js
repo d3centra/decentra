@@ -71,7 +71,7 @@ export default function Navbar() {
 
             <li className={styles.li_last}>
               <Link href={`/${username}`}>
-                <img src={`${user.photoURL}` || ''} alt={`${username}` || ''}></img>
+                <img src={`${user?.photoURL}` || ''} alt={`${username}` || ''}></img>
               </Link>
             </li>
           </div>

@@ -1,12 +1,14 @@
 import { auth, firestore, googleAuthProvider } from '@lib/firebase';
-import { doc, writeBatch, getDoc, getFirestore } from 'firebase/firestore';
+;import { doc, writeBatch, getDoc, getFirestore } from 'firebase/firestore';
 import { signInWithPopup, signInAnonymously, signOut } from 'firebase/auth';
 import { UserContext } from '@lib/context';
 
-
+import toast from 'react-hot-toast';
 import { useEffect, useState, useCallback, useContext } from 'react';
 import debounce from 'lodash.debounce';
 import router, { useRouter } from 'next/router';
+import styles from '../styles.module.css'
+
 
 export default function Enter(props) {
   const { user, username } = useContext(UserContext);
@@ -47,28 +49,16 @@ function SignOutButton() {
 // Username form
 
 
-function UsernameMessage({ username, isValid, loading }) {
-  if (loading) {
-    return <p>Checking...</p>;
-  } else if (isValid) {
-    return <p className="text-success">{username} is available!</p>;
-  } else if (username && !isValid) {
-    return <p className="text-danger">That username is taken!</p>;
-  } else {
-    return <p></p>;
-  }
-}
-
+// Username form
 function UsernameForm() {
   const [formValue, setFormValue] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   const { user, username } = useContext(UserContext);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     // Create refs for both documents
     const userDoc = doc(getFirestore(), 'users', user.uid);
     const usernameDoc = doc(getFirestore(), 'usernames', formValue);
@@ -79,7 +69,8 @@ function UsernameForm() {
     batch.set(usernameDoc, { uid: user.uid });
 
     await batch.commit();
-
+    router.push(`/`);
+    toast.success('You are now a community member!')
   };
 
   const onChange = (e) => {
@@ -124,16 +115,12 @@ function UsernameForm() {
 
   return (
     !username && (
-      <section>
-        <h3>Choose Username</h3>
-        <form onSubmit={onSubmit}>
-          <input name="username" placeholder="myname" value={formValue} onChange={onChange} />
+      <>
+      <section className={styles.username_container}>
+        <h3 className={styles.username_header}>Secure your username</h3>
+        <form className={styles.username_form} onSubmit={onSubmit}>
+          <input className={styles.username_input} name="username" placeholder="myname" value={formValue} onChange={onChange} />
           <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
-          <button type="submit" className="btn-green" disabled={!isValid}>
-            Choose
-          </button>
-
-          <h3>Debug State</h3>
           <div>
             Username: {formValue}
             <br />
@@ -141,8 +128,29 @@ function UsernameForm() {
             <br />
             Username Valid: {isValid.toString()}
           </div>
+          <button type="submit" className={styles.username_btn} disabled={!isValid}>
+            Choose
+          </button>
         </form>
       </section>
+
+      <div>
+      
+      </div>
+      </>
+      
     )
   );
+}
+
+function UsernameMessage({ username, isValid, loading }) {
+  if (loading) {
+    return <p>Checking...</p>;
+  } else if (isValid) {
+    return <p className="text-success">{username} is available!</p>;
+  } else if (username && !isValid) {
+    return <p className="text-danger">That username is taken!</p>;
+  } else {
+    return <p></p>;
+  }
 }
