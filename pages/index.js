@@ -1,82 +1,145 @@
-import Metatags from '@components/helpers/MetaTags';
-import Loader from '@components/simple/Loader';
-import CreateLink from '@components/layout/CreateLink';
-import AuthCheck from '@components/helpers/AuthCheck';
-import { firestore, auth, postToJSON } from '@lib/firebase';
-import { serverTimestamp, query, collection, orderBy, getFirestore, setDoc, doc, collectionGroup, where, limit, getDocs} from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import LinkItem from '@components/simple/LinkItem';
-import PostFeed from '@components/layout/PostFeed';
-import react, { useState, useContext } from 'react';
-import styles from './styles.module.css'
+import { auth, firestore, googleAuthProvider } from '@lib/firebase';
+import { doc, writeBatch, getDoc, getFirestore } from 'firebase/firestore';
+import { signInWithPopup, signInAnonymously, signOut } from 'firebase/auth';
 import { UserContext } from '@lib/context';
+import Metatags from '@components/helpers/MetaTags';
 
-// Max post to query per page
-const LIMIT = 10;
+import { useEffect, useState, useCallback, useContext } from 'react';
+import debounce from 'lodash.debounce';
 
-export async function getServerSideProps(context) {
-  // const postsQuery = firestore
-  //   .collectionGroup('posts')
-  //   .where('published', '==', true)
-  //   .orderBy('createdAt', 'desc')
-  //   .limit(LIMIT);
-  const ref = collectionGroup(getFirestore(), 'posts');
-  const postsQuery = query(
-    ref,
-    where('published', '==', true),
-    orderBy('createdAt', 'desc'),
-    limit(LIMIT),
-  )
+export default function Enter(props) {
+  const { user, username } = useContext(UserContext);
 
-  const posts = (await getDocs(postsQuery)).docs.map(postToJSON);
- 
-  return {
-    props: { posts }, // will be passed to the page component as props
-  };
-}
-
-export default function index({posts}) {
+  // 1. user signed out <SignInButton />
+  // 2. user signed in, but missing username <UsernameForm />
+  // 3. user signed in, has username <SignOutButton />
   return (
-
-      <main className={styles.main}>
-        <AuthCheck>
-          <div className={styles.main_grid}>
-            <CreateLink />
-            <LinkList />
-            </div>
-            <div className={styles.long_block}>
-              <PostFeed posts={posts}/>
-          </div> 
-        </AuthCheck>
-      </main>
-  )
+    <main>
+      <Metatags title="Enter" description="Sign up for this amazing app!" />
+      {user ? !username ? <UsernameForm /> : <SignOutButton /> : <SignInButton />}
+    </main>
+  );
 }
 
+// Sign in with Google button
+function SignInButton() {
+  const signInWithGoogle = async () => {
+    await signInWithPopup(auth, googleAuthProvider)
+  };
 
-
-function LinkList() {
-  // const ref = firestore.collection('users').doc(auth.currentUser.uid).collection('posts');
-  // const query = ref.orderBy('createdAt');
-
-  const ref = collection(getFirestore(), 'users', auth.currentUser.uid, 'links')
-  const linkQuery = query(ref, orderBy('createdAt')) 
-  const [querySnapshot] = useCollection(linkQuery);
-
-  
-  const links = querySnapshot?.docs.map((doc) => doc.data());
-  
   return (
     <>
-      {
-        links != undefined ?
-        <Links links={links} />
-        :
-        ''
-      }
+      <button className="btn-google" onClick={signInWithGoogle}>
+        <img src={'/google.png'} width="30px" /> Sign in with Google
+      </button>
+      <button onClick={() => signInAnonymously(auth)}>
+        Sign in Anonymously
+      </button>
     </>
   );
 }
 
-function Links({links, admin}){
-  return links ? links.map((link) => <LinkItem link={link} key={link.slug} admin={admin} />) : null;
+// Sign out button
+function SignOutButton() {
+  return <button onClick={() => signOut(auth)}>Sign Out</button>;
+}
+
+// Username form
+function UsernameForm() {
+  const [formValue, setFormValue] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { user, username } = useContext(UserContext);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    // Create refs for both documents
+    const userDoc = doc(getFirestore(), 'users', user.uid);
+    const usernameDoc = doc(getFirestore(), 'usernames', formValue);
+
+    // Commit both docs together as a batch write.
+    const batch = writeBatch(getFirestore());
+    batch.set(userDoc, { username: formValue, photoURL: user.photoURL, displayName: user.displayName });
+    batch.set(usernameDoc, { uid: user.uid });
+
+    await batch.commit();
+  };
+
+  const onChange = (e) => {
+    // Force form value typed in form to match correct format
+    const val = e.target.value.toLowerCase();
+    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+
+    // Only set form value if length is < 3 OR it passes regex
+    if (val.length < 3) {
+      setFormValue(val);
+      setLoading(false);
+      setIsValid(false);
+    }
+
+    if (re.test(val)) {
+      setFormValue(val);
+      setLoading(true);
+      setIsValid(false);
+    }
+  };
+
+  //
+
+  useEffect(() => {
+    checkUsername(formValue);
+  }, [formValue]);
+
+  // Hit the database for username match after each debounced change
+  // useCallback is required for debounce to work
+  const checkUsername = useCallback(
+    debounce(async (username) => {
+      if (username.length >= 3) {
+        const ref = doc(getFirestore(), 'usernames', username);
+        const snap = await getDoc(ref);
+        console.log('Firestore read executed!', snap.exists());
+        setIsValid(!snap.exists());
+        setLoading(false);
+      }
+    }, 500),
+    []
+  );
+
+  return (
+    !username && (
+      <section>
+        <h3>Choose Username</h3>
+        <form onSubmit={onSubmit}>
+          <input name="username" placeholder="myname" value={formValue} onChange={onChange} />
+          <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
+          <button type="submit" className="btn-green" disabled={!isValid}>
+            Choose
+          </button>
+
+          <h3>Debug State</h3>
+          <div>
+            Username: {formValue}
+            <br />
+            Loading: {loading.toString()}
+            <br />
+            Username Valid: {isValid.toString()}
+          </div>
+        </form>
+      </section>
+    )
+  );
+}
+
+function UsernameMessage({ username, isValid, loading }) {
+  if (loading) {
+    return <p>Checking...</p>;
+  } else if (isValid) {
+    return <p className="text-success">{username} is available!</p>;
+  } else if (username && !isValid) {
+    return <p className="text-danger">That username is taken!</p>;
+  } else {
+    return <p></p>;
+  }
 }

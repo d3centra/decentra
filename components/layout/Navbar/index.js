@@ -36,7 +36,7 @@ export default function Navbar() {
             </li>
 
             <li className={styles.li}>
-              <Link href="/">
+              <Link href="/main">
                 <button className={styles.link_btn}>Home</button>
               </Link>
             </li>
@@ -71,7 +71,7 @@ export default function Navbar() {
 
             <li className={styles.li_last}>
               <Link href={`/${username}`}>
-                <img src={`${user.photoURL}`} alt={`${username}`}></img>
+                <img src={`${user.photoURL}` || ''} alt={`${username}` || ''}></img>
               </Link>
             </li>
           </div>
@@ -80,7 +80,7 @@ export default function Navbar() {
         {/* user is not signed OR has not created username */}
         {!username && (
           <li className={styles.li_profile}>
-            <Link href="/enter">
+            <Link href="/">
               <button>Log in</button>
             </Link>
           </li>
