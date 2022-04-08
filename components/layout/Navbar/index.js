@@ -80,7 +80,7 @@ export default function Navbar() {
         {/* user is not signed OR has not created username */}
         {!username && (
           <li className={styles.li_profile}>
-            <Link href="/">
+            <Link href="/enter">
               <button>Log in</button>
             </Link>
           </li>
