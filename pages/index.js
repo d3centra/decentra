@@ -1,23 +1,81 @@
 import Metatags from '@components/helpers/MetaTags';
 import Loader from '@components/simple/Loader';
+import CreateLink from '@components/layout/CreateLink';
 import AuthCheck from '@components/helpers/AuthCheck';
-import react, { useState } from 'react';
+import { firestore, auth, postToJSON } from '@lib/firebase';
+import { serverTimestamp, query, collection, orderBy, getFirestore, setDoc, doc, collectionGroup, where, limit, getDocs} from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import LinkItem from '@components/simple/LinkItem';
+import PostFeed from '@components/layout/PostFeed';
+import react, { useState, useContext } from 'react';
 import styles from './styles.module.css'
+import { UserContext } from '@lib/context';
 
-const test = [1, 2, 3, 4, 5, 6]
+// Max post to query per page
+const LIMIT = 10;
 
-export default function index() {
+export async function getServerSideProps(context) {
+  // const postsQuery = firestore
+  //   .collectionGroup('posts')
+  //   .where('published', '==', true)
+  //   .orderBy('createdAt', 'desc')
+  //   .limit(LIMIT);
+  const ref = collectionGroup(getFirestore(), 'posts');
+  const postsQuery = query(
+    ref,
+    where('published', '==', true),
+    orderBy('createdAt', 'desc'),
+    limit(LIMIT),
+  )
+
+  const posts = (await getDocs(postsQuery)).docs.map(postToJSON);
+ 
+  return {
+    props: { posts }, // will be passed to the page component as props
+  };
+}
+
+export default function index({posts}) {
   return (
     <AuthCheck>
       <main className={styles.main}>
         <div className={styles.main_grid}>
-        <div className={styles.link_block_create}>+</div> 
-          {test.map((num) => {
-            return<div className={styles.link_block}>{num} huhuh</div> 
-          })}
+        <CreateLink />
+        <LinkList />
         </div>
-        <div className={styles.long_block}></div> 
+        <div className={styles.long_block}>
+          <PostFeed posts={posts}/>
+        </div> 
       </main>
     </AuthCheck>
   )
+}
+
+
+
+function LinkList() {
+  // const ref = firestore.collection('users').doc(auth.currentUser.uid).collection('posts');
+  // const query = ref.orderBy('createdAt');
+
+  const ref = collection(getFirestore(), 'users', auth.currentUser.uid, 'links')
+  const linkQuery = query(ref, orderBy('createdAt')) 
+  const [querySnapshot] = useCollection(linkQuery);
+
+  
+  const links = querySnapshot?.docs.map((doc) => doc.data());
+  
+  return (
+    <>
+      {
+        links != undefined ?
+        <Links links={links} />
+        :
+        ''
+      }
+    </>
+  );
+}
+
+function Links({links, admin}){
+  return links ? links.map((link) => <LinkItem link={link} key={link.slug} admin={admin} />) : null;
 }

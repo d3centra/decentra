@@ -1,6 +1,11 @@
 .logo{
   background-color: #303030;
   margin-bottom: 2em;
+  background-image: url('https://i.imgur.com/YeqM8du.png');
+  height: 10vh;
+  background-size: cover;
+  width: 10vh;
+  border-radius: 50%;
 }
 
 .links{
@@ -24,7 +29,6 @@
 
 .li{
   width: 100%; 
-  padding-left: 1em;
   margin: 0;
   display: flex;
   align-items: center;
@@ -32,10 +36,15 @@
 }
 
 .link_btn{
+  margin-left: 1em;
   width: 80%;
   background-color: #303030;
 }
 
 .li_profile{
+  margin-top: 10em;
+}
+
+.list_last{
   margin-top: 10em;
 }

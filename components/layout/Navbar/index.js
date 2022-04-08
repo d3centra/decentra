@@ -26,9 +26,12 @@ export default function Navbar() {
         {/* user is signed-in and has username */}
         {username && (
           <div className={styles.links}>
+
+              
+        
             <li className={styles.li}>
               <Link href="/">
-                <img src="https://i.imgur.com/YeqM8du.png" alt="logo" className={styles.logo} />
+                <div className={styles.logo} />
               </Link>
             </li>
 
@@ -66,7 +69,7 @@ export default function Navbar() {
               <button onClick={signOutNow}>Log Out</button>
             </li>
 
-            <li className={styles.li}>
+            <li className={styles.li_last}>
               <Link href={`/${username}`}>
                 <img src={`${user.photoURL}`} alt={`${username}`}></img>
               </Link>

@@ -72,7 +72,7 @@ export default function Home(props) {
   };
 
   return (
-    <main>
+    <main className={styles.main}>
       <Metatags title="Home Page" description="Get the latest posts on our site" />
 
       <div className="card card-info">

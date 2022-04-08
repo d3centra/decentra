@@ -25,7 +25,7 @@ body {
 }
 
 @media screen and (min-width: 786px) {
-  
+
 main {
   position: fixed;
   top: 0;
@@ -78,7 +78,7 @@ code {
 .navbar {
   height: 100vh;
   width: 8vw;
-  min-width: 80px;
+  min-width: 140px;
   background: #272522;
   color: var(--colors-text);
   position: fixed;
@@ -104,6 +104,9 @@ code {
   width: 50px;
   height: 50px;
   cursor: pointer;
+  position: fixed;
+  bottom: 5vh;
+  left: 2.5vw;
 }
 
 .navbar li {
@@ -128,6 +131,7 @@ code {
   border-radius: 0.25rem;
   cursor: pointer;
   margin: 0.5rem 1rem 0.5rem 0;
+  margin-left: 1em;
 }
 
 @media only screen and (max-width: 768px) {
@@ -202,7 +206,6 @@ button.btn-logo {
   border-radius: 50%;
   max-width: 150px;
 }
-
 .card-info {
   color: white;
   background: var(--color-blue);

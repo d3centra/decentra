@@ -1,0 +1,10 @@
+.card{
+  min-height: 15vh;
+  padding: 1em;
+  padding: 2rem;
+  margin: 1rem 0;
+  background-color: #272522;
+  border: 1px solid var(--color-gray);
+  border-radius: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.187);
+}

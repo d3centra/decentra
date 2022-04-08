@@ -1,0 +1,19 @@
+.link_block{
+  height: 30vh;
+  width: 100%;
+  background-color: #272522;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.link_block:hover{
+  background-color: #212120;
+}
+
+.white_icon{
+  filter: brightness(0) invert(0.75);
+  height: 10vh;
+}

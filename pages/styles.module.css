@@ -26,7 +26,7 @@
 }
 
 .long_block{
-  height: 40vh;
+  max-height: 100%;
   width: 100%;
   background-color: #272522;
   padding: 1em;

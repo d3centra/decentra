@@ -11,10 +11,11 @@ import { useRouter } from 'next/router';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import kebabCase from 'lodash.kebabcase';
 import toast from 'react-hot-toast';
+import style from './styles.module.css'
 
 export default function AdminPostsPage(props) {
   return (
-    <main>
+    <main  className={style.main}>
       <AuthCheck>
         <PostList />
         <CreateNewPost />
