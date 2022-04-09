@@ -1,12 +1,14 @@
 .link_block{
-  height: 30vh;
+  height: 154px;
   width: 100%;
   background-color: #272522;
   padding: 1em;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
+  border-radius: 7.5px;
+  box-shadow: 0 5px 4px 0px #1d1c1a;
 }
 
 .link_block:hover{
@@ -14,6 +16,5 @@
 }
 
 .white_icon{
-  filter: brightness(0) invert(0.75);
-  height: 10vh;
+  height: 80px;
 }
