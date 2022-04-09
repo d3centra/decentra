@@ -7,8 +7,8 @@
 }
 
 :root {
-  --color-bg: #3D3B39;
-  --color-text: white;
+  --color-bg: #2E2B29;
+  --color-text: #B3B3B2;
   --color-blue: #3b49df;
   --color-red: #df3b3b;
   --color-green: #14D010;
@@ -35,7 +35,7 @@ main {
   padding-top: 0;
   padding-top: 5em;
   padding-bottom: 0;
-  width: 70%;
+  width: calc(100% - 220px);
 }
 
 h1 { font-size: 2rem; }
@@ -77,8 +77,7 @@ code {
 
 .navbar {
   height: 100vh;
-  width: 8vw;
-  min-width: 140px;
+  width: 220px;
   background: #272522;
   color: var(--colors-text);
   position: fixed;
