@@ -18,6 +18,7 @@
   background-color: #3D3B39;
   padding: 1em;
   padding-top: 5em;
+  border-radius: 7.5px
 }
 
 .input{
@@ -33,10 +34,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid white;
+  border: 1px solid #3D3B39;
+  border-radius: 7.5px;
+  box-shadow: 0 5px 4px 0px #1d1c1a4f;
 }
 
 .newBtn{
-  background-color: white;
-  color:#3D3B39;
+  background-color: transparent;
+  color: #B4B3B2;
+  border: 0px;
+  padding: 0rem;
 }
